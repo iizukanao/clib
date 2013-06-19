@@ -1,4 +1,4 @@
 clib
 ====
 
-C libraries
+C libraries that are used for my projects.
