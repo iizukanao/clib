@@ -12,13 +12,13 @@ void state_set(char *dir, char *name, char *value) {
   path_len = strlen(dir) + strlen(name) + 2;
   path = malloc(path_len);
   if (path == NULL) {
-    perror("malloc path");
+    perror("Memory allocation of path failed");
     return;
   }
   snprintf(path, path_len, "%s/%s", dir, name);
   fp = fopen(path, "w");
   if (fp == NULL) {
-    perror("State file open failed");
+    perror("Can't open state file");
     return;
   }
   fwrite(value, 1, strlen(value), fp);
@@ -35,13 +35,13 @@ void state_get(char *dir, char *name, char **buf) {
   path_len = strlen(dir) + strlen(name) + 2;
   path = malloc(path_len);
   if (path == NULL) {
-    perror("malloc path");
+    perror("Memory allocation of path failed");
     return;
   }
   snprintf(path, path_len, "%s/%s", dir, name);
   fp = fopen(path, "r");
   if (fp == NULL) {
-    perror("State file open failed");
+    perror("Can't open state file");
     return;
   }
   fseek(fp, 0, SEEK_END);
@@ -49,7 +49,7 @@ void state_get(char *dir, char *name, char **buf) {
   fseek(fp, 0, SEEK_SET);
   *buf = malloc(size);
   if (*buf == NULL) {
-    perror("Can't amlloc buffer");
+    perror("Memory allocation of state buffer failed");
     return;
   }
   fread(*buf, 1, size, fp);
