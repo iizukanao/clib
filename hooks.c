@@ -8,6 +8,7 @@
 #include <sys/inotify.h>
 #include <pthread.h>
 #include <signal.h>
+#include <dirent.h>
 
 #include "hooks.h"
 
@@ -24,6 +25,56 @@ typedef struct watch_target {
 
 static int keep_watching = 1;
 static pthread_t *watcher_thread;
+
+int clear_hooks(char *dirname) {
+  DIR *dir;
+  struct dirent *ent;
+  char *path = NULL;
+  char *new_path;
+  int path_len;
+  int dirname_len;
+  int status = 0;
+
+  dirname_len = strlen(dirname);
+  if ((dir = opendir(dirname)) != NULL) {
+    while ((ent = readdir(dir)) != NULL) {
+      if (strcmp(ent->d_name, ".") == 0 ||
+          strcmp(ent->d_name, "..") == 0) {
+        continue;
+      }
+      path_len = dirname_len + strlen(ent->d_name) + 2;
+      if (path == NULL) {
+        path = malloc(path_len);
+        if (path == NULL) {
+          perror("malloc path failed");
+          closedir(dir);
+          return -1;
+        }
+      } else {
+        new_path = realloc(path, path_len);
+        if (new_path == NULL) {
+          perror("realloc path failed");
+          closedir(dir);
+          return -1;
+        }
+        path = new_path;
+      }
+      snprintf(path, path_len, "%s/%s", dirname, ent->d_name);
+      if (unlink(path) != 0) {
+        perror("unlink failed");
+        status = -1;
+      }
+    }
+    closedir(dir);
+    if (path != NULL) {
+      free(path);
+    }
+  } else {
+    status = -1;
+  }
+
+  return status;
+}
 
 void *watch_for_file_creation(watch_target *target) {
   int length, i;
