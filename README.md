@@ -18,3 +18,7 @@ Creates hook mechanism using inotify.
 ### state
 
 Outputs application state as files.
+
+### config.h
+
+To be included from libraries.
