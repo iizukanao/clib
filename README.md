@@ -3,11 +3,11 @@ clib
 
 C libraries that are used for my projects.
 
-### httplivestreaming
+## httplivestreaming
 
 Creates HTTP Live Streaming MPEG-TS segments and m3u8 file from MPEG-TS stream.
 
-#### functions
+### functions
 
     HTTPLiveStreaming *hls_create();
 
@@ -21,18 +21,18 @@ Write `pkt` to HTTP Live Streaming bundled with `hls`. If split is 1, current se
 
 Destroy HTTPLivestreaming struct.
 
-### mpegts
+## mpegts
 
 Writes MPEG-TS with libavformat.
 
-### hooks
+## hooks
 
 Creates hook mechanism using inotify.
 
-### state
+## state
 
 Outputs application state as files.
 
-### config.h
+## config.h
 
 To be included from libraries.
