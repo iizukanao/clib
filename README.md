@@ -3,11 +3,11 @@ clib
 
 C libraries that are used for my projects.
 
-## httplivestreaming
+## HTTP Live Streaming (httplivestreaming.{c,h})
 
 Creates HTTP Live Streaming MPEG-TS segments and m3u8 file from MPEG-TS stream.
 
-### functions
+### Functions
 
     HTTPLiveStreaming *hls_create();
 
