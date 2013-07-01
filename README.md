@@ -21,9 +21,27 @@ Write `pkt` to HTTP Live Streaming bundled with `hls`. If split is 1, current se
 
 Destroy HTTPLivestreaming struct.
 
-## mpegts
+## MPEG-TS (mpegts.{c,h})
 
 Writes MPEG-TS with libavformat.
+
+### Functions
+
+    AVFormatContext *mpegts_create_context();
+
+Prepares new MPEG-TS stream and returns the pointer to AVFormatContext.
+
+    void mpegts_open_stream(AVFormatContext *format_ctx, char *filename, int dump_format);
+
+Opens new file for writing. If `dump_format` is 1, details of output format is written to the terminal.
+
+    void mpegts_close_stream(AVFormatContext *format_ctx);
+
+Closes the file. If this function completes, the file is ready for play.
+
+    void mpegts_destroy_context(AVFormatContext *format_ctx);
+
+Destroy AVFormatContext that is pointed by `format_ctx`.
 
 ## hooks
 
