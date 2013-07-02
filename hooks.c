@@ -104,7 +104,7 @@ void *watch_for_file_creation(watch_target *target) {
   int err = stat(dir, &st);
   if (err == -1) {
     if (errno == ENOENT) {
-      fprintf(stderr, "Target directory does not exist\n");
+      fprintf(stderr, "Hook target directory does not exist\n");
     } else {
       perror("stat error");
     }
@@ -133,7 +133,6 @@ void *watch_for_file_creation(watch_target *target) {
   while (keep_watching) {
     length = read(fd, buffer, EVENT_BUF_LEN);
     if (length < 0) {
-      perror("inotify read error");
       break;
     }
 
