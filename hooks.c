@@ -27,6 +27,9 @@ typedef struct watch_target {
 static int keep_watching = 1;
 static pthread_t *watcher_thread;
 
+void sig_handler(int signum) {
+}
+
 int clear_hooks(char *dirname) {
   DIR *dir;
   struct dirent *ent;
@@ -88,6 +91,8 @@ void *watch_for_file_creation(watch_target *target) {
   int read_content = target->read_content;
   free(target);
   dir_strlen = strlen(dir);
+
+  signal(SIGTERM, sig_handler);
 
   fd = inotify_init();
   if (fd < 0) {
