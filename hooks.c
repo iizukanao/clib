@@ -20,7 +20,8 @@
 
 typedef struct watch_target {
   char *dir;
-  void (*callback)(char *);
+  void (*callback)(char *, char *);
+  int read_content;
 } watch_target;
 
 static int keep_watching = 1;
@@ -83,8 +84,8 @@ void *watch_for_file_creation(watch_target *target) {
   int dir_strlen;
   char buffer[EVENT_BUF_LEN];
   char *dir = target->dir;
-  void (*callback)(char *) = target->callback;
-
+  void (*callback)(char *, char *) = target->callback;
+  int read_content = target->read_content;
   free(target);
   dir_strlen = strlen(dir);
 
@@ -115,7 +116,14 @@ void *watch_for_file_creation(watch_target *target) {
     exit(1);
   }
 
-  wd = inotify_add_watch(fd, dir, IN_CREATE);
+  uint32_t inotify_mask;
+  if (read_content) {
+    inotify_mask = IN_CLOSE_WRITE;
+  } else {
+    inotify_mask = IN_CREATE;
+  }
+
+  wd = inotify_add_watch(fd, dir, inotify_mask);
 
   while (keep_watching) {
     length = read(fd, buffer, EVENT_BUF_LEN);
@@ -128,15 +136,42 @@ void *watch_for_file_creation(watch_target *target) {
     while (i < length) {
       struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
       if (event->len) {
-        if (event->mask & IN_CREATE) {
+        if (event->mask & inotify_mask) {
           if (!(event->mask & IN_ISDIR)) { // file
-            callback(event->name);
             int path_len = dir_strlen + strlen(event->name) + 2;
             char *path = malloc(path_len);
-            snprintf(path, path_len, "%s/%s", dir, event->name);
             if (path == NULL) {
-              perror("malloc failed");
+              perror("malloc for file path failed");
             } else {
+              snprintf(path, path_len, "%s/%s", dir, event->name);
+
+              if (read_content) {
+                // Read file contents
+                FILE *fp = fopen(path, "rb");
+                char *content;
+                if (fp) {
+                  fseek(fp, 0, SEEK_END);
+                  long content_len = ftell(fp);
+                  fseek(fp, 0, SEEK_SET);
+                  content = malloc(content_len + 1);
+                  if (content) {
+                    fread(content, 1, content_len, fp);
+                    content[content_len] = '\0';
+                  } else {
+                    perror("malloc for file content failed");
+                  }
+                  fclose(fp);
+                } else {
+                  perror("fopen failed");
+                }
+                callback(event->name, content);
+                free(content);
+              } else {
+                callback(event->name, NULL);
+              }
+
+
+              // Delete that file
               if (unlink(path) != 0) {
                 perror("unlink failed");
               }
@@ -154,10 +189,11 @@ void *watch_for_file_creation(watch_target *target) {
   pthread_exit(0);
 }
 
-void start_watching_hooks(pthread_t *thread, char *dir, void (*callback)(char *)) {
+void start_watching_hooks(pthread_t *thread, char *dir, void (*callback)(char *, char *), int read_content) {
   watch_target *target = malloc(sizeof(watch_target));
   target->dir = dir;
   target->callback = callback;
+  target->read_content = read_content;
   pthread_create(thread, NULL, (void * (*)(void *))watch_for_file_creation, target);
   watcher_thread = thread;
 }
