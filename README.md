@@ -1,7 +1,7 @@
 clib
 ====
 
-C libraries that are used for my projects.
+My C libraries for Linux.
 
 ## HTTP Live Streaming (httplivestreaming.{c,h})
 
