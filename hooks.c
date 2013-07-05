@@ -152,7 +152,7 @@ void *watch_for_file_creation(watch_target *target) {
               if (read_content) {
                 // Read file contents
                 FILE *fp = fopen(path, "rb");
-                char *content;
+                char *content = NULL;
                 if (fp) {
                   fseek(fp, 0, SEEK_END);
                   long content_len = ftell(fp);
