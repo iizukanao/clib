@@ -45,7 +45,21 @@ Destroy AVFormatContext that is pointed by `format_ctx`.
 
 ## hooks
 
-Creates hook mechanism using inotify.
+Hook mechanism using inotify.
+
+### Functions
+
+    int clear_hooks(char *dirname);
+
+Remove all hooks (files) that exist in `dirname`.
+
+    void start_watching_hooks(pthread_t *thread, char *dir, void (*callback)(char *, char *), int read_content);
+
+Start `thread` that watches for hooks in `dir`. `callback` function is called with the hook name as the first argument. If `read_content` is 1, contents of hook file is also passed to `callback` as second argument.
+
+    void stop_watching_hooks();
+
+Stop hook watcher thread.
 
 ## state
 
