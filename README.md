@@ -5,13 +5,13 @@ My C libraries for Linux.
 
 ## HTTP Live Streaming (httplivestreaming.{c,h})
 
-Creates HTTP Live Streaming MPEG-TS segments and m3u8 file from MPEG-TS stream.
+Create HTTP Live Streaming MPEG-TS segments and m3u8 file from MPEG-TS stream.
 
 ### Functions
 
     HTTPLiveStreaming *hls_create();
 
-Starts new HTTP Live Streaming and returns a HTTPLiveStreaming struct.
+Start new HTTP Live Streaming and returns a HTTPLiveStreaming struct.
 
     int hls_write_packet(HTTPLiveStreaming *hls, AVPacket *pkt, int split);
 
@@ -23,21 +23,21 @@ Destroy HTTPLivestreaming struct.
 
 ## MPEG-TS (mpegts.{c,h})
 
-Writes MPEG-TS with libavformat.
+Write MPEG-TS with libavformat.
 
 ### Functions
 
     AVFormatContext *mpegts_create_context();
 
-Prepares new MPEG-TS stream and returns the pointer to AVFormatContext.
+Prepare new MPEG-TS stream and returns the pointer to AVFormatContext.
 
     void mpegts_open_stream(AVFormatContext *format_ctx, char *filename, int dump_format);
 
-Opens new file for writing. If `dump_format` is 1, details of output format is written to the terminal.
+Open new file for writing. If `dump_format` is 1, details of output format is written to the terminal.
 
     void mpegts_close_stream(AVFormatContext *format_ctx);
 
-Closes the file. If this function completes, the file is ready for play.
+Close the file. If this function completes, the file is ready for play.
 
     void mpegts_destroy_context(AVFormatContext *format_ctx);
 
@@ -63,8 +63,8 @@ Stop hook watcher thread.
 
 ## state
 
-Outputs application state as files.
+Output application state as files.
 
 ## config.h
 
-To be included from libraries.
+Included from libraries.
