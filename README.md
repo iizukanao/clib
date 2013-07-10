@@ -65,6 +65,8 @@ Stop hook watcher thread.
 
 Output application state as files.
 
+### Functions
+
     void state_set(char *dir, char *name, char *value);
 
 Output state as a file `name` in directory `dir` with the contents of `value.`
@@ -73,8 +75,6 @@ Output state as a file `name` in directory `dir` with the contents of `value.`
 
 Get the state of a file `name` in directory `dir`. The value of the state is stored in `buf` as a string.
 
-### Functions
-
 ## config.h
 
-Included from libraries.
+Intended to be included from libraries.
