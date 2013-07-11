@@ -43,7 +43,7 @@ Close the file. If this function completes, the file is ready for play.
 
 Destroy AVFormatContext that is pointed by `format_ctx`.
 
-## hooks
+## hooks (hooks.{c,h})
 
 Hook mechanism using inotify.
 
@@ -61,7 +61,7 @@ Start `thread` that watches for hooks in `dir`. `callback` function is called wi
 
 Stop hook watcher thread.
 
-## state
+## state (state.{c,h})
 
 Output application state as files.
 
