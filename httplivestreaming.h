@@ -15,6 +15,10 @@ typedef struct HTTPLiveStreaming {
   int segment_duration;
   char *dir;
   int is_started;
+  int use_encryption;
+  char *encryption_key_uri;
+  uint8_t *encryption_key;
+  uint8_t *encryption_iv;
 } HTTPLiveStreaming;
 
 HTTPLiveStreaming *hls_create();
