@@ -21,6 +21,46 @@ Write `pkt` to HTTP Live Streaming bundled with `hls`. If split is 1, current se
 
 Destroy HTTPLivestreaming struct.
 
+### Initialization code for AES-128 encryption
+
+    HTTPLiveStreaming *hls;
+
+    hls = hls_create();
+    hls->dir = "/some/output/dir";
+    hls->use_encryption = 1;
+
+    // URI for the key
+    hls->encryption_key_uri = malloc(10);
+    if (hls->encryption_key_uri == NULL) {
+      perror("malloc hls->encryption_key_uri");
+      return;
+    }
+    memcpy(hls->encryption_key_uri, "video.key", 10);
+
+    // Byte array of the key
+    hls->encryption_key = malloc(16);
+    if (hls->encryption_key == NULL) {
+      perror("malloc hls->encryption_key");
+      return;
+    }
+    uint8_t tmp_key[] = {
+      0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
+      0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff
+    };
+    memcpy(hls->encryption_key, tmp_key, 16);
+
+    // Byte array of the initialization vector
+    hls->encryption_iv = malloc(16);
+    if (hls->encryption_iv == NULL) {
+      perror("malloc hls->encryption_iv");
+      return;
+    }
+    uint8_t tmp_iv[] = {
+      0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+      0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
+    };
+    memcpy(hls->encryption_iv, tmp_iv, 16);
+
 ## MPEG-TS (mpegts.{c,h})
 
 Write MPEG-TS with libavformat.
