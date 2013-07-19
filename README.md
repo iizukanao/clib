@@ -63,7 +63,7 @@ Destroy HTTPLivestreaming struct.
 
 ## MPEG-TS (mpegts.{c,h})
 
-Write MPEG-TS with libavformat.
+Write a MPEG-TS file from video and audio packets with libavformat.
 
 ### Functions
 
