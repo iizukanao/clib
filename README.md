@@ -21,6 +21,27 @@ Write `pkt` to HTTP Live Streaming bundled with `hls`. If split is 1, current se
 
 Destroy HTTPLivestreaming struct.
 
+### How to use
+
+    HTTPLiveStreaming *hls;
+    AVPacket pkt;
+    int ret;
+
+    // Create a context
+    hls = hls_create();
+    hls->dir = "/dir/to/put/videos";
+
+    // Set up AVPacket here
+
+    // Write single frame
+    ret = hls_write_packet(hls, &pkt, 0);
+
+    // Split segment, then write single frame
+    int ret = hls_write_packet(hls, &pkt, 1);
+
+    // Destroy context
+    hls_destroy(hls);
+
 ### Initialization code for AES-128 encryption
 
     HTTPLiveStreaming *hls;
