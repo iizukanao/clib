@@ -104,6 +104,15 @@ Close the file. If this function completes, the file is ready for play.
 
 Destroy AVFormatContext that is pointed by `format_ctx`.
 
+### How to use
+
+    AVFormatContext *format_ctx;
+
+    format_ctx = mpegts_create_context();
+    mpegts_open_stream(&format_ctx, "output.ts", 0);
+    mpegts_close_stream(&format_ctx);
+    mpegts_destroy_context(&format_ctx);
+
 ## hooks (hooks.{c,h})
 
 Hook mechanism using inotify.
