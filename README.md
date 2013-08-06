@@ -148,12 +148,12 @@ Stop hook watcher thread.
       exit(1);
     }
 
-    // start
+    // start watching
     start_watching_hooks(&hooks_thread, HOOKS_DIR, on_hook, 1);
 
     // ...event loop...
 
-    // stop
+    // stop watching
     stop_watching_hooks();
     pthread_join(hooks_thread, NULL);
 
