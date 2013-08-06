@@ -131,6 +131,32 @@ Start `thread` that watches for hooks in `dir`. `callback` function is called wi
 
 Stop hook watcher thread.
 
+### How to use
+
+    #define HOOKS_DIR "hooks"
+
+    pthread_t hooks_thread;
+
+    // callback that is called when a hook is triggered
+    void on_hook(char *filename, char *content) {
+      printf("hook %s is triggered with the content: %s", content);
+    }
+
+    // clear the directory contents first
+    if (clear_hooks(HOOKS_DIR) != 0) {
+      fprintf(stderr, "clear_hooks() failed\n");
+      exit(1);
+    }
+
+    // start
+    start_watching_hooks(&hooks_thread, HOOKS_DIR, on_hook, 1);
+
+    // ...event loop...
+
+    // stop
+    stop_watching_hooks();
+    pthread_join(hooks_thread, NULL);
+
 ## state (state.{c,h})
 
 Output application state as files.
