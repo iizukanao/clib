@@ -105,7 +105,7 @@ void mpegts_open_stream(AVFormatContext *format_ctx, char *outputfilename, int d
   }
 
   if (avio_open(&format_ctx->pb, outputfilename, AVIO_FLAG_WRITE) < 0) {
-    fprintf(stderr, "avio_open failed\n");
+    fprintf(stderr, "avio_open for %s failed\n", outputfilename);
     exit(1);
   }
 
