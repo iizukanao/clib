@@ -95,6 +95,10 @@ void mpegts_close_stream(AVFormatContext *format_ctx) {
   avio_close(format_ctx->pb);
 }
 
+void mpegts_close_stream_without_trailer(AVFormatContext *format_ctx) {
+  avio_close(format_ctx->pb);
+}
+
 void mpegts_open_stream(AVFormatContext *format_ctx, char *outputfilename, int dump_format) {
   if (dump_format) {
     av_dump_format(format_ctx, 0, outputfilename, 1);
@@ -111,6 +115,21 @@ void mpegts_open_stream(AVFormatContext *format_ctx, char *outputfilename, int d
 
   if (avformat_write_header(format_ctx, NULL)) {
     fprintf(stderr, "avformat_write_header failed\n");
+    exit(1);
+  }
+}
+
+void mpegts_open_stream_without_header(AVFormatContext *format_ctx, char *outputfilename, int dump_format) {
+  if (dump_format) {
+    av_dump_format(format_ctx, 0, outputfilename, 1);
+  }
+
+  if (strcmp(outputfilename, "-") == 0) {
+    outputfilename = "pipe:1";
+  }
+
+  if (avio_open(&format_ctx->pb, outputfilename, AVIO_FLAG_WRITE) < 0) {
+    fprintf(stderr, "avio_open for %s failed\n", outputfilename);
     exit(1);
   }
 }
