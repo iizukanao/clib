@@ -121,7 +121,7 @@ int write_index(HTTPLiveStreaming *hls, int is_end) {
   snprintf(filepath, 1024, "%s/%s", hls->dir, hls->index_filename);
   rename(tmp_filepath, filepath);
 
-  int last_seq = hls->most_recent_number - hls->num_recent_files;
+  int last_seq = hls->most_recent_number - hls->num_recent_files - hls->num_retained_old_files;
   if (last_seq >= 1) {
     snprintf(filepath, 1024, "%s/%d.ts", hls->dir, last_seq);
     unlink(filepath);
@@ -180,9 +180,10 @@ HTTPLiveStreaming *hls_create() {
   AVFormatContext *format_ctx = mpegts_create_context();
   hls->format_ctx = format_ctx;
   hls->index_filename = "index.m3u8";
-  hls->num_recent_files = 5;
+  hls->num_recent_files = 3;
+  hls->num_retained_old_files = 10;
   hls->most_recent_number = 0;
-  hls->segment_duration = 2;
+  hls->segment_duration = 1;
   hls->dir = ".";
   hls->is_started = 0;
   hls->use_encryption = 0;

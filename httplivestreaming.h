@@ -11,6 +11,7 @@ typedef struct HTTPLiveStreaming {
   AVFormatContext *format_ctx;
   char *index_filename;
   int num_recent_files;
+  int num_retained_old_files;
   int most_recent_number;
   int segment_duration;
   char *dir;
